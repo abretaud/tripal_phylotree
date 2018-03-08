@@ -5,6 +5,7 @@
  */
 
 require_once 'handlers/tripal_phylotree.handler.inc';
+//require_once 'handlers/tripal_phylotree.filter_handler.inc';
 
 /**
  * Implements hook_views_default_views().
@@ -274,6 +275,27 @@ function tripal_phylotree_views_pre_view(&$view, &$display_id, &$args) {
           'path' => 'chado_phylotree/[phylotree_name]'
         )
       ), $org_id.'_count');
+
+      // FIXME this doesn't work, disable it for now
+      /*$view->add_item($view->current_display, 'filter', 'phylotree_count', $org_id.'_count', array(
+        'label' => $organisms[$org_id]['genus'].' '.$organisms[$org_id]['species'].' count',
+        'table' => 'phylotree_count',
+        'field' => $org_id.'_count',
+        'exposed' => TRUE,
+        'expose' => array(
+          'operator_id' => $org_id.'_count_op',
+          'label' => 'Count for '.$organisms[$org_id]['genus'].' '.$organisms[$org_id]['species'],
+          'use_operator' => TRUE,
+          'operator' => $org_id.'_count_op',
+          'identifier' => $org_id.'_count',
+          'remember_roles' => array(
+              2 => '2',
+              1 => 0,
+              4 => 0,
+          )
+        ),
+        'group' => 1
+      ), $org_id.'_count');*/
     }
   }
 }
@@ -299,6 +321,9 @@ function tripal_phylotree_views_data_alter(&$data) {
           // https://drupal.stackexchange.com/questions/150169/sort-handler-for-pseudo-field-in-views
           'click sortable' => FALSE,
         ),
+        /*'filter' => array(
+          'handler' => 'tripal_phylotree_handler_filter_field_count',
+        ),*/
     );
   }
 }
@@ -312,6 +337,9 @@ function tripal_phylotree_views_handlers() {
       'tripal_phylotree_views_handler_field_org_count' => array(
         'parent' => 'views_handler_field',
       ),
+      /*'tripal_phylotree_handler_filter_field_count' => array(
+        'parent' => 'views_handler_filter',
+      )*/
     )
   );
 }
