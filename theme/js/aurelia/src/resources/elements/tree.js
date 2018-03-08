@@ -205,6 +205,7 @@ export class Tree {
 
   // init() : create the tnt.tree chart
   init() {
+      this.WIDTH = this.phylogramElement.clientWidth - 200;
 		let that = this;
     this._tree = tnt.tree()
       .data(this.api.treeData)

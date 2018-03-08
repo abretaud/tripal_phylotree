@@ -7,7 +7,7 @@
 import {inject, observable} from 'aurelia-framework';
 import {HttpClient} from 'aurelia-fetch-client';
 import * as crossfilter2 from 'crossfilter2';
-let crossfilter = crossfilter2.crossfilter;
+let crossfilter = crossfilter2.default;
 let fasta = msa.io.fasta; /* msa lib is loaded in <script> tag */
 
 @inject(HttpClient)
@@ -79,14 +79,14 @@ export class Api {
   }
 
   getMsaData() {
-    let promise = this.http.fetch(this.MSA_URL)
+    return; /*let promise = this.http.fetch(this.MSA_URL)
         .then(res => res.text())
         .then(data => {
           this.msaFasta = data.trim(); // because ajax call to drupal has an initial empty line
           this.msaSeqs = fasta.parse(this.msaFasta);
           return this.msaSeqs;
         });
-    return promise;
+    return promise;*/
   }
 
   // postProcess() : add the corresponding MSA sequence to each record in the

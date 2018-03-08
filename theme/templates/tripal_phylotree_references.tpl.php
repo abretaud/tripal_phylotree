@@ -4,9 +4,9 @@ $phylotree = $variables['node']->phylotree;
 print $phylotree->name;
 ?></b>:
 <?php
-if( ! empty($phylotree->comment) ) {
+/*if( ! empty($phylotree->comment) ) {
   print $phylotree->comment;
-}
+}*/
 ?>
 </p>
 </div>

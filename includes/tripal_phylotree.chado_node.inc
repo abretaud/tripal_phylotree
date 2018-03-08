@@ -59,12 +59,12 @@ function tripal_phylotree_node_view($node, $view_mode, $langcode) {
       '#tripal_toc_title' => 'Phylogram',
       '#weight' => -100,
     );
-    $node->content['tripal_phylotree_references'] = array(
+    /*$node->content['tripal_phylotree_references'] = array(
       '#markup' => theme('tripal_phylotree_references', array('node' => $node)),
       '#tripal_toc_id'    => 'phylotree_references',
       '#tripal_toc_title' => 'Cross References',
       '#weight' => -80,
-    );
+  );*/
      $node->content['tripal_phylotree_analysis'] = array(
       '#markup' => theme('tripal_phylotree_analysis', array('node' => $node)),
       '#tripal_toc_id'    => 'phylotree_analysis',

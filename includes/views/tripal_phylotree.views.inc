@@ -68,7 +68,7 @@ function tripal_phylotree_defaultvalue_user_phylotrees() {
    $handler->display->display_options['style_plugin'] = 'table';
    $handler->display->display_options['style_options']['columns'] = array(
      'phylotree_name' => 'phylotree_name',
-     'phylotree_comment' => 'phylotree_comment',
+     //'phylotree_comment' => 'phylotree_comment',
      'total_count' => 'total_count',
   );
 
@@ -83,13 +83,13 @@ function tripal_phylotree_defaultvalue_user_phylotrees() {
             'separator' => '',
             'empty_column' => 0,
         ),
-        'phylotree_comment' => array(
+        /*'phylotree_comment' => array(
             'sortable' => 1,
             'default_sort_order' => 'asc',
             'align' => '',
             'separator' => '',
             'empty_column' => 0,
-        ),
+        ),*/
         'total_count' => array(
             'sortable' => 1,
             'default_sort_order' => 'asc',
@@ -120,9 +120,9 @@ function tripal_phylotree_defaultvalue_user_phylotrees() {
     $handler->display->display_options['fields']['phylotree_name']['alter']['make_link'] = TRUE;
     $handler->display->display_options['fields']['phylotree_name']['alter']['path'] = 'chado_phylotree/[phylotree_name]';
     /* Field: phylotree_count: Description */
-    $handler->display->display_options['fields']['phylotree_comment']['id'] = 'phylotree_comment';
+    /*$handler->display->display_options['fields']['phylotree_comment']['id'] = 'phylotree_comment';
     $handler->display->display_options['fields']['phylotree_comment']['table'] = 'phylotree_count';
-    $handler->display->display_options['fields']['phylotree_comment']['field'] = 'phylotree_comment';
+    $handler->display->display_options['fields']['phylotree_comment']['field'] = 'phylotree_comment';*/
     if ($result->count > 0) {
         /* Field: phylotree_count: Domains/Interpro term */
         $handler->display->display_options['fields']['domains']['id'] = 'domains';
@@ -168,7 +168,7 @@ function tripal_phylotree_defaultvalue_user_phylotrees() {
     );
     $handler->display->display_options['filters']['phylotree_name']['max_length'] = '40';
     /* Filter criterion: phylotree_count: Description */
-    $handler->display->display_options['filters']['phylotree_comment']['id'] = 'phylotree_comment';
+    /*$handler->display->display_options['filters']['phylotree_comment']['id'] = 'phylotree_comment';
     $handler->display->display_options['filters']['phylotree_comment']['table'] = 'phylotree_count';
     $handler->display->display_options['filters']['phylotree_comment']['field'] = 'phylotree_comment';
     $handler->display->display_options['filters']['phylotree_comment']['operator'] = 'allwords';
@@ -185,7 +185,7 @@ function tripal_phylotree_defaultvalue_user_phylotrees() {
         1 => 0,
         4 => 0,
     );
-    $handler->display->display_options['filters']['phylotree_comment']['max_length'] = '40';
+    $handler->display->display_options['filters']['phylotree_comment']['max_length'] = '40';*/
     if ($result->count > 0) {
         /* Filter criterion: gene: Domains/Interpro term */
        /*
