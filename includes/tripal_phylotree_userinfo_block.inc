@@ -48,7 +48,7 @@ function tripal_phylotree_block_view($delta='') {
   * return string
   */
 function tripal_phylotree_userinfo_block_contents() {
-    return 'Search for gene families starting from a family ID (e.g. OG0013488), using words from the family description (e.g., iron homeostasis or chlorophyll binding protein), or using the "count" filters to find families by size or species composition. [<a href="/search/phylotree/userinfo">More help</a>]';
+    return 'Search for gene families starting from a family ID (e.g. OG0013488), or using the "Total gene count" filter to find families by size.';
 }
 
 /* End: block at the top with user help info*/

@@ -13,14 +13,14 @@ export class Msa {
   MSA_LABEL_WIDTH = 150;
   MSA_LABEL_FONT_SIZE = 9;
   MSA_ZOOMER_WIDTH = 475;
-  
+
   @bindable familyName;
   @bindable showDialog; // two-way databinding for toggling dialog in app.js
   @bindable treeEl;
-  
+
   @observable selectedFeatureNames = {};
   @observable selectedFeatureNum = 0; // count of selected features
-  
+
   menu = false;
   _msa = null; // msa viewer component
   msaDirty = false; // flag for whether the msa component should be reloaded
@@ -54,7 +54,7 @@ export class Msa {
     }
     if(this.dialog) {
       // hide or show the dialog as necessary
-      this.updateDialog();      
+      this.updateDialog();
     }
   }
 
@@ -130,7 +130,7 @@ export class Msa {
 		this._msa.g.zoomer.attributes.alignmentWidth = w;
 		this._msa.render();
   }
-  
+
   // callback for jquery.ui.dialog close event
   onDialogClosed() {
     this.onClearSelection();
@@ -144,13 +144,13 @@ export class Msa {
     this.be.propertyObserver(this.api, 'cfUpdated')
       .subscribe( o => this.onCfUpdated(o));
   }
-  
+
   onCfCreated(cf) {
     this._cf = cf;
     // create a dimension by name (keep our own instance of this dimension)
     this._dim = cf.dimension(d => d.name);
   }
-  
+
   onCfUpdated(msg) {
     if(msg.sender != this) {
       if(this.showDialog) {
@@ -161,7 +161,7 @@ export class Msa {
       }
     }
   }
-  
+
   updateMsa() {
     let data = this._dim.top(Infinity);
     let seqs = _.map(data, d => d.msa);
@@ -223,7 +223,7 @@ export class Msa {
   }
 
   onClearSelection() {
-    this._msa.g.selcol.reset([]);    
+    this._msa.g.selcol.reset([]);
     this.selectedFeatureNum = 0;
     this.selectedFeatureNames = {};
   }

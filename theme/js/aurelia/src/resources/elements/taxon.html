@@ -1,14 +1,14 @@
 <template>
   <require from="./taxon.css"></require>
-	<div id="taxa-dialog" ref="taxonEl">
-		<span if.bind="! api.loading">
+	<div id="taxa-dialog" ref="taxonEl" style="display:none">
+		<span if.bind="!api.loading && showDialog">
 			<button disabled.bind="! chartDirty"
 				class="ui-button ui-corner-all"
 				click.delegate="onResetChart()">
 				<i class="fa fa-refresh" aria-hidden="true"></i>
 				Reset Taxa Selection
 			</button>
-			<svg class="taxon-chart" ref="taxonSvgEl"></svg>
 		</span>
+		<svg class="taxon-chart" ref="taxonSvgEl"></svg>
 	</div>
 </template>

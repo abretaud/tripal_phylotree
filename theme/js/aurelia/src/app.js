@@ -9,11 +9,11 @@ export class App {
 
 	// currently shown tools in the ui
 	tools = {
-		taxon : true, // taxon doubles as a legend, so show it by default.
+		taxon : false, // taxon doubles as a legend, so show it by default.
 		msa : false, // hide by default- for consistency with past versions.
 		help : false // hide help dialog by default
 	};
-	
+
   treeData = null;
   msaData = null;
 	familyName = FAMILY_NAME; // is global var in php template
@@ -25,11 +25,11 @@ export class App {
 
   attached() {
 		this.configureHttpClient();
-		
+
 		// fetch the resources for this gene family
 		this.api.init()
 			.then( () => {
-				$('#ajax-spinner').remove();				
+				$('#ajax-spinner').remove();
 			})
   }
 

@@ -9,7 +9,7 @@
  * Implements hook_node_info().
  *
  * Provide information to drupal about the node types that we're creating
- * in this module. 
+ * in this module.
  *
  * @ingroup tripal_phylotree
  */
@@ -28,7 +28,7 @@ function tripal_phylotree_node_info() {
         'singular' => t('Phylotree'),
         'plural' => t('Phylotrees')
       ),
-      
+
       /* sync_filters: tripal is hardcoded to look for this
        sync_filter settings: type_id and organism_id. (phylotree does
        not have organism_id but need to set it false anyways. */
@@ -48,9 +48,9 @@ function tripal_phylotree_node_info() {
  * @ingroup tripal_phylotree
  */
 function tripal_phylotree_node_view($node, $view_mode, $langcode) {
-  
+
   if($node->type != 'chado_phylotree') { return; }
-  
+
   switch($view_mode) {
   case 'full':
     $node->content['tripal_phylotree_base'] = array(
@@ -70,9 +70,9 @@ function tripal_phylotree_node_view($node, $view_mode, $langcode) {
       '#tripal_toc_id'    => 'phylotree_analysis',
       '#tripal_toc_title' => 'Analysis',
       '#weight' => -70,
-    ); 
+    );
     break;
-    
+
   case 'teaser':
     $node->content['tripal_phylotree_teaser'] = array(
       '#markup' => theme('tripal_phylotree_teaser', array('node' => $node)),
@@ -113,7 +113,7 @@ function tripal_phylotree_node_insert($node) {
 
   switch ($node->type) {
     case 'chado_phylotree':
-      
+
       $phylotree_id = chado_get_id_from_nid('phylotree', $node->nid);
       $values = array('phylotree_id' => $phylotree_id);
       $phylotree = chado_generate_var('phylotree', $values);
@@ -137,7 +137,7 @@ function tripal_phylotree_node_update($node) {
 
   switch ($node->type) {
     case 'chado_phylotree':
-      
+
       $phylotree_id = chado_get_id_from_nid('phylotree', $node->nid);
       $values = array('phylotree_id' => $phylotree_id);
       $phylotree = chado_generate_var('phylotree', $values);
@@ -174,12 +174,12 @@ function chado_phylotree_chado_node_default_title_format() {
  * @ingroup tripal_phylotree
  */
 function chado_phylotree_insert($node) {
-  
+
   // if there is an phylotree_id in the $node object then this must
   // be a sync so we can skip adding the phylotree as it is already
   // there, although we do need to proceed with the rest of the
   // insert
-    
+
   if (!property_exists($node, 'phylotree_id')) {
     // we aren't supporting editing for phylotrees, yet, so didn't
     // implement inserting of phylotree here!
@@ -212,9 +212,9 @@ function chado_phylotree_load($nodes) {
   // uid may apparently be a nid, or vid depending how tripal calls
   // this function!  (and how the default view was implemented)
   foreach ($nodes as $nid => $node) {
-    
+
     $phylotree_id = chado_get_id_from_nid('phylotree', $node->nid);
-    
+
     // if the nid does not have a matching record then skip this node.
     // this can happen with orphaned nodes.
     if (!$phylotree_id) {
@@ -223,10 +223,10 @@ function chado_phylotree_load($nodes) {
     $phylotree = chado_generate_var(
       'phylotree',
       array('phylotree_id' => $phylotree_id));
-    
+
     // expand the comment field, tripal omits it by default
     $phylotree = chado_expand_var($phylotree, 'field', 'phylotree.comment');
-    
+
     $nodes[$nid]->phylotree = $phylotree;
     $node->title = chado_get_node_title($node);
   }
@@ -260,9 +260,9 @@ function chado_phylotree_delete(&$node) {
 
   // Remove data from phylotree and phylotreeprop tables of chado
   // database as well
-  
+
   chado_query("DELETE FROM {phylotree} WHERE phylotree_id = :phylotree_id", array(':phylotree_id' => $phylotree_id));
-  
+
 }
 
 /**
@@ -289,7 +289,7 @@ function chado_phylotree_delete(&$node) {
  * @ingroup tripal_phylotree
  */
 function chado_phylotree_node_access($node, $op, $account) {
-  
+
   $node_type = $node;
   if (is_object($node)) {
     $node_type = $node->type;
@@ -334,14 +334,14 @@ function chado_phylotree_node_access($node, $op, $account) {
 function phylotree_by_name($name) {
 
     $sql = <<<SQL
- SELECT cp.nid as node_id 
+ SELECT cp.nid as node_id
  FROM chado.phylotree t
  LEFT JOIN chado_phylotree cp on cp.phylotree_id = t.phylotree_id
  WHERE t.name = :name
 SQL;
 
     $args = array(':name' => $name);
-    $result = chado_query( $sql, $args );    
+    $result = chado_query( $sql, $args );
     $nid = $result->fetchField();
     if(empty($nid)) {
         drupal_add_http_header('Status', '404 Not Found');
@@ -349,7 +349,8 @@ SQL;
         drupal_exit();
     }
     drupal_set_title(sprintf('Gene Family | %s', $name));
-    $html = drupal_render(node_view(node_load($nid))); 
+    $view = node_view(node_load($nid));
+    $html = drupal_render($view);
     print drupal_render_page($html);
 }
 
@@ -415,7 +416,7 @@ SQL;
         $sql = <<<SQL
           SELECT fp.value
           FROM chado.featureprop fp, chado.feature f
-          WHERE fp.type_id = (SELECT cvterm_id FROM chado.cvterm 
+          WHERE fp.type_id = (SELECT cvterm_id FROM chado.cvterm
                               WHERE NAME = 'family representative')
           AND (f.uniquename = :gene OR f.name = :gene)
           AND fp.feature_id = f.feature_id
@@ -462,9 +463,9 @@ SQL;
  * @ingroup tripal_phylotree
  */
 function phylotree_by_genename_text($gene) {
-    
+
     $sql = <<<SQL
- SELECT fp.value 
+ SELECT fp.value
  FROM chado.featureprop fp, chado.feature g
  WHERE g.uniquename = :gene
  AND fp.feature_id=g.feature_id
@@ -486,7 +487,7 @@ SQL;
  * @ingroup tripal_phylotree
  */
 function phylotree_by_id($phylotree_id) {
-  
+
   //getting the name of the tree will allow construction of links to MSAs
   //TODO: might be better to have this function accept the name as its param
   $sql = <<<SQL
@@ -524,7 +525,7 @@ SQL;
   // stuff like that.
   $phylonodes = array();
   $root_phylonode_ref = null;
-  
+
   foreach ($result as $r) {
     $phylonode_id = (int) $r->phylonode_id;
 
@@ -535,7 +536,7 @@ SQL;
       'length' => (double) $r->length,
       'cvterm_name' => $r->cvterm_name
     );
-    
+
     // other props may exist only for leaf nodes
     if($r->name) {
       $node['name'] = $r->name;
@@ -555,7 +556,7 @@ SQL;
     }
     $phylonodes[$phylonode_id] = $node;
   }
-  
+
   //populate the children[] arrays for each node
   foreach( $phylonodes as $key => &$node ) {
     if($node['parent_phylonode_id'] !== 0) {
@@ -595,7 +596,7 @@ function phylotree_json_endpoint($phylotree_id) {
  * @ingroup tripal_phylotree
  */
 function phylotree_feature_summary($phylotree_id) {
-  
+
   $sql = 'SELECT o.abbreviation, COUNT(o.organism_id) AS count '.
     'FROM chado.phylonode n '.
     'LEFT OUTER JOIN chado.feature f ON n.feature_id = f.feature_id '.
