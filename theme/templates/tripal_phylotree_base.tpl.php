@@ -45,7 +45,7 @@ printf("var FAMILY_NAME = '%s';\n", $phylotree->name);
 
 // write js var with path to our theme, for use below by javascript functions.
 // prefix path to theme with / because drupal returns it as a relative URL.
-printf("var THEME_PATH = '/%s';\n", $my_path);
+printf("var THEME_PATH = '%s';\n", $my_path);
 
 
 // write the tree data into the template as js var (saving one ajax
@@ -181,7 +181,7 @@ drupal_add_library('system', 'ui.dialog');
 //
 // default group/level javascripts (loads after library group)
 //
-$js_dir = '/'. $my_path . '/theme/js';
+$js_dir = $my_path . '/theme/js';
 drupal_add_js(
     $js_dir . '/tour-autolauncher.js',
     array('type' => 'file', 'group' => JS_DEFAULT)
