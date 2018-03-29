@@ -1,15 +1,24 @@
 <?php
-$my_path = path_to_theme();
-if(empty($my_path)) {
-  // on lis-dev, path_to_theme() is returning empty string. this is a
-  // problem on lis-stage too, probably all the lis servers. Would be
-  // good to figure this out, as the recent rename of the git repos to
-  // tripal_phylogeny broke this once, and in general we can't really
-  // know where it will be installed. workaround: hardcode the path to
-  // the theme.
-  $my_path = 'sites/all/modules/tripal/tripal_phylogeny';
-  // note: there is no leading '/' because that is the format used by
-  // path_to_theme(), even though this is effectively an absolute url.
+
+global $base_url;
+
+if (!empty($base_url)) {
+        $my_path = $base_url;
+        $my_path .= '/sites/all/modules/tripal_phylotree';
+}
+else {
+    $my_path = path_to_theme();
+    if(empty($my_path)) {
+      // on lis-dev, path_to_theme() is returning empty string. this is a
+      // problem on lis-stage too, probably all the lis servers. Would be
+      // good to figure this out, as the recent rename of the git repos to
+      // tripal_phylogeny broke this once, and in general we can't really
+      // know where it will be installed. workaround: hardcode the path to
+      // the theme.
+      $my_path = 'sites/all/modules/tripal/tripal_phylotree';
+      // note: there is no leading '/' because that is the format used by
+      // path_to_theme(), even though this is effectively an absolute url.
+    }
 }
 
 $phylotree = $variables['node']->phylotree;
