@@ -1,8 +1,8 @@
 /* override some jquery.ui dialog styles */
 
-.ui-dialog .ui-dialog-titlebar {
+/*.ui-dialog .ui-dialog-titlebar {
 		height: 12px;
-}
+}*/
 
 .ui-dialog-title {
 		font-size: 12px;
