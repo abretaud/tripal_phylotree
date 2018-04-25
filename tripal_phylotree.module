@@ -106,7 +106,7 @@ function tripal_phylotree_menu() {
    // /chado_gene_phylotree_v2?gene_name=C.cajan_38960_gene
    // or comma seperated list of gene names
    // /chado_gene_phylotree_v2?gene_name=Araip.8X95G,Araip.JJJ8N,Araip.B0L4D
-   $items['chado_gene_phylotree_v2'] = array(
+   $items['chado_gene_phylotree'] = array(
     'page callback' => 'phylotree_redirect_by_gene',
     'access callback' => TRUE, // allow all anonymous http clients
    );

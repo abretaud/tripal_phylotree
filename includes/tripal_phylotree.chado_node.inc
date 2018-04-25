@@ -332,7 +332,6 @@ function chado_phylotree_node_access($node, $op, $account) {
  * @ingroup tripal_phylotree
  */
 function phylotree_by_name($name) {
-
     $sql = <<<SQL
  SELECT cp.nid as node_id
  FROM chado.phylotree t
@@ -386,30 +385,62 @@ function phylotree_redirect_by_gene() {
         // a single gene name was requested
         $gene_names = array($gene_name);
     }
-    //in some contexts, it's easy to make the target family explicit; doing
-    //so makes it easier to get the right tree when the gene is not explcitly
-    //part of the tree building or we don't store the gene info explicitly
-    //(non-legumes).
+
     if (!$family) {
-        // query for the gene family name by gene name (taking only the
-        // first gene name from the list)
-        $sql = <<<SQL
-          SELECT fp.value
-          FROM chado.featureprop fp, chado.feature f
-          WHERE fp.type_id = (SELECT cvterm_id FROM chado.cvterm
-                  WHERE NAME = 'gene family')
-          AND (f.uniquename = :gene OR f.name = :gene)
-          AND fp.feature_id = f.feature_id
-SQL;
-        $args = array(':gene' => $gene_names[0]);
-        $result = chado_query($sql, $args);
-        $family = $result->fetchField();
-        if(! $family) {
-        drupal_add_http_header('Status', '404 Not Found');
-        print("Error: gene family not found\n");
-        drupal_exit();
-        }
+      $sql = "SELECT fp.value
+             FROM chado.featureprop fp, chado.feature g
+             WHERE (g.uniquename = :gene OR g.name = :gene)
+             AND g.type_id=(select cvterm_id from chado.cvterm where name='gene' and cv_id = (select cv_id from chado.cv where name='sequence'))
+             AND fp.feature_id=g.feature_id
+             AND fp.type_id=(select cvterm_id from chado.cvterm where name='gene family')";
+
+      $args = array(':gene' => $gene_names[0]);
+      $result = chado_query( $sql, $args );
+      $family = $result->fetchField();
     }
+
+    // no family found yet, check if given name is an mrna name
+    if(! $family) {
+      $sql = "SELECT fp.value
+             FROM chado.featureprop fp, chado.feature g, chado.feature_relationship fr, chado.feature m
+             WHERE (m.uniquename = :gene OR m.name = :gene)
+             AND fr.subject_id  = m.feature_id
+             AND fr.object_id = g.feature_id
+             AND m.type_id=(select cvterm_id from chado.cvterm where name='mRNA' and cv_id = (select cv_id from chado.cv where name='sequence'))
+             AND fp.feature_id=g.feature_id
+             AND fp.type_id=(select cvterm_id from chado.cvterm where name='gene family')";
+
+      $args = array(':gene' => $gene_names[0]);
+      $result = chado_query( $sql, $args );
+      $family = $result->fetchField();
+    }
+
+    // no family found yet, check if given name is a polypeptide name
+    if(! $family) {
+      $sql = "SELECT fp.value
+             FROM chado.featureprop fp, chado.feature g, chado.feature_relationship fr, chado.feature m, chado.feature_relationship frp, chado.feature p
+             WHERE (p.uniquename = :gene OR p.name = :gene)
+             AND fr.subject_id  = m.feature_id
+             AND fr.object_id = g.feature_id
+             AND frp.subject_id  = p.feature_id
+             AND frp.object_id = m.feature_id
+             AND m.type_id=(select cvterm_id from chado.cvterm where name='mRNA' and cv_id = (select cv_id from chado.cv where name='sequence'))
+             AND p.type_id=(select cvterm_id from chado.cvterm where name='polypeptide' and cv_id = (select cv_id from chado.cv where name='sequence'))
+             AND fp.feature_id=g.feature_id
+             AND fp.type_id=(select cvterm_id from chado.cvterm where name='gene family')";
+
+      $args = array(':gene' => $gene_names[0]);
+      $result = chado_query( $sql, $args );
+      $family = $result->fetchField();
+    }
+
+    // No family found, give up
+    if(! $family) {
+      drupal_add_http_header('Status', '404 Not Found');
+      print("Error: gene family not found\n");
+      drupal_exit();
+    }
+
     $pp_names = array();
     foreach ($gene_names as $n) {
         // query for the polypeptide (node name) for each gene name
@@ -425,17 +456,17 @@ SQL;
         $result = chado_query($sql, $args);
         $name = $result->fetchField();
         if ($name) {
-        $pp_names[] = $name;
+          $pp_names[] = $name;
         }
         else{
         //probably won't be listed in tree, but at least we'll get the message
-        $pp_names[] = $n;
+          $pp_names[] = $n;
         }
     }
     // multiple family representatives appear to resolve to same
     // polypeptide, so uniquify the array
     $pp_names = array_unique($pp_names);
-    $url = sprintf('/chado_phylotree/%s', $family);
+    $url = sprintf('chado_phylotree/%s', $family);
     $encoded_names = array();
     foreach(array_unique($pp_names) as $name) {
         $encoded_names[] = rawurlencode($name);
