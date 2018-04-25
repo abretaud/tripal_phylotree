@@ -205,7 +205,7 @@ drupal_add_js(
 
 // finally, use a regular script tag to inject the aurelia boostrapper
 // it will populate the aurelia-app div, above.
-printf('<script src="%s/aurelia/scripts/vendor-bundle-836a027866.js" data-main="aurelia-bootstrapper"></script>',
+printf('<script src="%s/aurelia/scripts/vendor-bundle-5abf1d2739.js" data-main="aurelia-bootstrapper"></script>',
        $js_dir);
 
 // Hack to ensure that jquery 1.4.4 (drupal default) is loaded as the last jquery version, used by tripal_phylotree js code
