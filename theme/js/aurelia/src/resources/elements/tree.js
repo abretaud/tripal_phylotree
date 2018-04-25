@@ -71,7 +71,7 @@ export class Tree {
 				q.hilite_node = [ q.hilite_node ];
 			}
 		}
-		let keys = _.map(q.hilite_node, n => n.toLowerCase());
+		let keys = _.map(q.hilite_node, n => n);
 		let vals = _.map(keys, n => true);
 		this.hiliteFeatures = _.zipObject(keys, vals);
 		this.hiliteFeaturesCount = keys.length;
@@ -125,7 +125,7 @@ export class Tree {
 	onMsaSelectionChange(newValue, oldValue) {
 		// val is like {arath.AT2G14835.1: true, glyma.Glyma.20G133500.1: true}
 		let names = _.keys(newValue);
-		names = _.map(names, n => n.toLowerCase());
+		names = _.map(names, n => n);
 		names = _.filter(names, n => {
 			// filter out the consensus sequence because it is not shown in tree view
 			return n.indexOf('consensus') === -1;
@@ -143,7 +143,7 @@ export class Tree {
 	updateLeafNodeHilite(scroll) {
 		let that = this;
 		d3.selectAll('text.tnt_tree_label')
-			.filter((d) => d.name.toLowerCase() in that.hiliteFeatures)
+			.filter((d) => d.name in that.hiliteFeatures)
 			.each( function(d) {
 				d.bbox = this.getBBox();
 			});
@@ -151,7 +151,7 @@ export class Tree {
 		// the text labels bounding box was set in d.bbox, so use that to
 		// draw a rect with the hilite color.
 		d3.selectAll('g.tnt_tree_node')
-			.filter((d) => d.name.toLowerCase() in that.hiliteFeatures)
+			.filter((d) => d.name in that.hiliteFeatures)
 			.insert('svg:rect', ':first-child')
 			.attr('x', (d) => {
 				if(d.textAnchor === 'end') {
@@ -182,7 +182,7 @@ export class Tree {
 	 */
 	onScrollToHilite(featureName) {
 		let node = this._tree.root().find_node( node => {
-			return node.node_name().toLowerCase() === featureName;
+			return node.node_name() === featureName;
 		});
 		let nodeId = node.property('_id');
 		let selector = '#tnt_tree_node_phylogram_'+ nodeId;
@@ -224,7 +224,7 @@ export class Tree {
 		let labeler = tnt.tree.label.text();
 		labeler.display (  function (node, layout_type) {
 			let d = node.data();
-			let hilite = d.name.toLowerCase() in that.hiliteFeatures;
+			let hilite = d.name in that.hiliteFeatures;
 			let l = d3.select(this) // note: this is the d3js "this"
 			    .append('text')
 			    .text((d) => d.name)
