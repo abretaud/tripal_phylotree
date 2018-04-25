@@ -37,6 +37,18 @@ bundle the javascript application you will need:
 * Npm 3 or newer
 * Git
 
+These dependencies can be installed like this in a typical docker image:
+
+```
+cd /var/www/html/sites/all/modules/tripal_phylotree
+curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
+apt-get -qq update --fix-missing && \
+apt-get --no-install-recommends -y install \
+nodejs build-essential libssl-dev
+```
+
+Then, the JS build steps are:
+
 ```
 # install aurelia-cli so the au command is on your path
 npm install aurelia-cli -g
