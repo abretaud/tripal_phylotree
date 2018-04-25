@@ -444,23 +444,57 @@ function phylotree_redirect_by_gene() {
     $pp_names = array();
     foreach ($gene_names as $n) {
         // query for the polypeptide (node name) for each gene name
-        $sql = <<<SQL
-          SELECT fp.value
-          FROM chado.featureprop fp, chado.feature f
-          WHERE fp.type_id = (SELECT cvterm_id FROM chado.cvterm
-                              WHERE NAME = 'family representative')
-          AND (f.uniquename = :gene OR f.name = :gene)
-          AND fp.feature_id = f.feature_id
-SQL;
+        $sql = "SELECT p.uniquename
+               FROM chado.feature p
+               WHERE (p.uniquename = :gene OR p.name = :gene)
+               AND p.type_id=(select cvterm_id from chado.cvterm where name='polypeptide' and cv_id = (select cv_id from chado.cv where name='sequence'))";
+
         $args = array(':gene' => $n);
         $result = chado_query($sql, $args);
         $name = $result->fetchField();
+
         if ($name) {
           $pp_names[] = $name;
         }
-        else{
-        //probably won't be listed in tree, but at least we'll get the message
-          $pp_names[] = $n;
+        else {
+          $sql = "SELECT p.uniquename
+                 FROM chado.feature m, chado.feature_relationship frp, chado.feature p
+                 WHERE (m.uniquename = :gene OR m.name = :gene)
+                 AND frp.subject_id  = p.feature_id
+                 AND frp.object_id = m.feature_id
+                 AND m.type_id=(select cvterm_id from chado.cvterm where name='mRNA' and cv_id = (select cv_id from chado.cv where name='sequence'))
+                 AND p.type_id=(select cvterm_id from chado.cvterm where name='polypeptide' and cv_id = (select cv_id from chado.cv where name='sequence'))";
+
+          $args = array(':gene' => $n);
+          $result = chado_query($sql, $args);
+          $name = $result->fetchField();
+
+          if ($name) {
+            $pp_names[] = $name;
+          }
+          else {
+            $sql = "SELECT p.uniquename
+                   FROM chado.feature g, chado.feature_relationship fr, chado.feature m, chado.feature_relationship frp, chado.feature p
+                   WHERE (g.uniquename = :gene OR g.name = :gene)
+                   AND fr.subject_id  = m.feature_id
+                   AND fr.object_id = g.feature_id
+                   AND frp.subject_id  = p.feature_id
+                   AND frp.object_id = m.feature_id
+                   AND m.type_id=(select cvterm_id from chado.cvterm where name='mRNA' and cv_id = (select cv_id from chado.cv where name='sequence'))
+                   AND p.type_id=(select cvterm_id from chado.cvterm where name='polypeptide' and cv_id = (select cv_id from chado.cv where name='sequence'))";
+
+            $args = array(':gene' => $n);
+            $result = chado_query($sql, $args);
+            $name = $result->fetchField();
+
+            if ($name) {
+              $pp_names[] = $name;
+            }
+            else {
+              //probably won't be listed in tree, but at least we'll get the message
+              $pp_names[] = $n;
+            }
+          }
         }
     }
     // multiple family representatives appear to resolve to same
