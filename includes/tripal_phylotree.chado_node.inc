@@ -441,6 +441,8 @@ function phylotree_redirect_by_gene() {
       drupal_exit();
     }
 
+    $family = explode(',', $family)[0]; # Sometimes we get a list (don't know why...)
+
     $pp_names = array();
     foreach ($gene_names as $n) {
         // query for the polypeptide (node name) for each gene name
