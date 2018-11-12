@@ -406,7 +406,7 @@ function phylotree_redirect_by_gene() {
              WHERE (m.uniquename = :gene OR m.name = :gene)
              AND fr.subject_id  = m.feature_id
              AND fr.object_id = g.feature_id
-             AND m.type_id=(select cvterm_id from chado.cvterm where (name='mRNA' or name = 'transcript') and cv_id = (select cv_id from chado.cv where name='sequence'))
+             AND m.type_id in (select cvterm_id from chado.cvterm where (name='mRNA' or name = 'transcript') and cv_id = (select cv_id from chado.cv where name='sequence'))
              AND fp.feature_id=g.feature_id
              AND fp.type_id=(select cvterm_id from chado.cvterm where name='gene family')";
 
@@ -424,7 +424,7 @@ function phylotree_redirect_by_gene() {
              AND fr.object_id = g.feature_id
              AND frp.subject_id  = p.feature_id
              AND frp.object_id = m.feature_id
-             AND m.type_id=(select cvterm_id from chado.cvterm where (name='mRNA' or name='transcript') and cv_id = (select cv_id from chado.cv where name='sequence'))
+             AND m.type_id in (select cvterm_id from chado.cvterm where (name='mRNA' or name='transcript') and cv_id = (select cv_id from chado.cv where name='sequence'))
              AND p.type_id=(select cvterm_id from chado.cvterm where name='polypeptide' and cv_id = (select cv_id from chado.cv where name='sequence'))
              AND fp.feature_id=g.feature_id
              AND fp.type_id=(select cvterm_id from chado.cvterm where name='gene family')";
@@ -462,7 +462,7 @@ function phylotree_redirect_by_gene() {
                  WHERE (m.uniquename = :gene OR m.name = :gene)
                  AND frp.subject_id  = p.feature_id
                  AND frp.object_id = m.feature_id
-                 AND m.type_id=(select cvterm_id from chado.cvterm where (name='mRNA' or name='transcript') and cv_id = (select cv_id from chado.cv where name='sequence'))
+                 AND m.type_id in (select cvterm_id from chado.cvterm where (name='mRNA' or name='transcript') and cv_id = (select cv_id from chado.cv where name='sequence'))
                  AND p.type_id=(select cvterm_id from chado.cvterm where name='polypeptide' and cv_id = (select cv_id from chado.cv where name='sequence'))";
 
           $args = array(':gene' => $n);
@@ -480,7 +480,7 @@ function phylotree_redirect_by_gene() {
                    AND fr.object_id = g.feature_id
                    AND frp.subject_id  = p.feature_id
                    AND frp.object_id = m.feature_id
-                   AND m.type_id=(select cvterm_id from chado.cvterm where (name='mRNA' or name='transcript') and cv_id = (select cv_id from chado.cv where name='sequence'))
+                   AND m.type_id in (select cvterm_id from chado.cvterm where (name='mRNA' or name='transcript') and cv_id = (select cv_id from chado.cv where name='sequence'))
                    AND p.type_id=(select cvterm_id from chado.cvterm where name='polypeptide' and cv_id = (select cv_id from chado.cv where name='sequence'))";
 
             $args = array(':gene' => $n);
