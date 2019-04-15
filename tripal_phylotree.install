@@ -183,6 +183,7 @@ function tripal_phylotree_uninstall() {
 
 function tripal_phylotree_add_phylotree_count_mview($with_domain = FALSE) {
   //Materialized view addition
+  $redirect = FALSE;
 
   $sql_query = "WITH
                 count_genes AS (SELECT count(*) count, t.phylotree_id FROM phylotree t, phylonode n WHERE n.phylotree_id=t.phylotree_id AND n.label IS NOT null GROUP BY t.phylotree_id),
@@ -250,11 +251,15 @@ function tripal_phylotree_add_phylotree_count_mview($with_domain = FALSE) {
     'tripal_phylotree', // name of module submitting view
     $schema,      // schema api array representation
     $sql_query,         // sql query that loads the mview
-    $comment );
+    $comment,
+    $redirect);
 }
 
 
 function tripal_phylotree_add_tree2domain_mview() {
+
+  $redirect =  FALSE;
+
   //Materialized view addition
 
   $sql_t2d = "select string_agg(DISTINCT(f1.name),E' ') AS domains, t.phylotree_id, string_agg(DISTINCT(d.iprterm),E' ') AS ipr
@@ -309,7 +314,8 @@ function tripal_phylotree_add_tree2domain_mview() {
     'tripal_phylotree', // name of module submitting view
     $schema_t2d,      // schema api array representation
     $sql_t2d,         // sql query that loads the mview
-    $comment_t2d );
+    $comment_t2d,
+    $redirect);
 }
 
 /**
