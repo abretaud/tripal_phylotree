@@ -155,10 +155,10 @@ meaning is explained in the following table:
 // library group/level of scripts
 //
 $js_config = array('type' => 'external', 'group' => JS_LIBRARY);
-drupal_add_js(
+/*drupal_add_js(
     '//cdn.bio.sh/msa/1.0/msa.min.gz.js',
     $js_config
-);
+);*/
 drupal_add_js(
     '//cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js',
     $js_config
