@@ -159,7 +159,7 @@ $js_config = array('type' => 'external', 'group' => JS_LIBRARY);
 $js_dir = $my_path . '/theme/js';
 
 drupal_add_js(
-    $js_dir . '/msa.min.gz.js',
+    $js_dir . '/msa.min.js',
     array('type' => 'file', 'group' => JS_LIBRARY)
 );
 
