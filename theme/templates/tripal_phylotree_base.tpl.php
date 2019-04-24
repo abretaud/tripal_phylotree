@@ -155,10 +155,14 @@ meaning is explained in the following table:
 // library group/level of scripts
 //
 $js_config = array('type' => 'external', 'group' => JS_LIBRARY);
+
+$js_dir = $my_path . '/theme/js';
+
 drupal_add_js(
-    '//cdn.bio.sh/msa/1.0/msa.min.gz.js',
-    $js_config
+    $js_dir . '/msa.min.js',
+    array('type' => 'file', 'group' => JS_LIBRARY)
 );
+
 drupal_add_js(
     '//cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js',
     $js_config
@@ -185,7 +189,7 @@ drupal_add_library('system', 'ui.dialog');
 //
 // default group/level javascripts (loads after library group)
 //
-$js_dir = $my_path . '/theme/js';
+
 drupal_add_js(
     $js_dir . '/tour-autolauncher.js',
     array('type' => 'file', 'group' => JS_DEFAULT)

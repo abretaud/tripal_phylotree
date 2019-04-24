@@ -573,11 +573,10 @@ SQL;
   SELECT n.phylonode_id, n.parent_phylonode_id, n.label AS name,
   distance AS length, f.feature_id, f.name AS feature_name,
   cvt.name AS cvterm_name, o.organism_id, o.common_name, o.abbreviation,
-  o.genus, o.species, cf.nid AS feature_node_id, co.nid AS organism_node_id
+  o.genus, o.species, co.nid AS organism_node_id
   FROM chado.phylonode n
   LEFT OUTER JOIN chado.cvterm cvt ON n.type_id = cvt.cvterm_id
   LEFT OUTER JOIN chado.feature f ON n.feature_id = f.feature_id
-  LEFT OUTER JOIN chado_feature cf ON cf.feature_id = f.feature_id
   LEFT OUTER JOIN chado.organism o ON f.organism_id = o.organism_id
   LEFT OUTER JOIN chado_organism co ON co.organism_id = o.organism_id
   WHERE n.phylotree_id = :phylotree_id
@@ -609,7 +608,6 @@ SQL;
       $node['name'] = $r->name;
     }
     if($r->feature_id) {
-      $node['feature_id'] = (int) $r->feature_id;
       $node['feature_name'] = $r->feature_name;
       $node['feature_node_id'] = (int) $r->feature_node_id;
     }
